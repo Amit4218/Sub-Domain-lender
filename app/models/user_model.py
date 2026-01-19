@@ -2,8 +2,8 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import ForeignKey, String
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql.sqltypes import UUID
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from config import db
@@ -63,6 +63,8 @@ class Record(db.Model):  # ty:ignore[unsupported-base]
         index=True,
     )
 
+    name: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+
     record_type: Mapped[str] = mapped_column(
         String(255),
         nullable=False,
@@ -71,6 +73,13 @@ class Record(db.Model):  # ty:ignore[unsupported-base]
 
     points_to: Mapped[str] = mapped_column(
         String(255),
+        nullable=False,
+        index=True,
+    )
+
+    dns_record_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),  # ty:ignore[no-matching-overload]
+        unique=True,
         nullable=False,
         index=True,
     )

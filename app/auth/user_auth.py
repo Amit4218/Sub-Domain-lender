@@ -2,31 +2,31 @@ from app.models import User
 from config import db
 
 
-def login_user(email: str, password: str) -> dict:
-    if not email or password:
-        raise ValueError("Both Feilds Must Be Filled")
+def login_user(email: str, password: str):
+    if not email or not password:
+        return None, "Both Fields Must Be Filled"
 
     user = db.session.query(User).filter_by(email=email).first()
 
     if not user:
-        raise ValueError("Invalid Credientials")
+        return None, "Invalid Credientials"
 
     if not user.check_password(password=password):
-        raise ValueError("Invalid Credientials")
+        return None, "Invalid Credientials"
 
     data = {"id": user.id, "email": user.email}
 
-    return data
+    return data, None
 
 
-def register_user(email: str, password: str) -> dict:
-    if not email or password:
-        raise ValueError("Both Feilds Must Be Filled")
+def register_user(email: str, password: str):
+    if not email or not password:
+        return None, "Both Fields Must Be Filled"
 
     user = db.session.query(User).filter_by(email=email).first()
 
     if user is not None:
-        raise Exception("User Already Exists!")
+        return None, "User Already Exists!"
 
     new_user = User(email=email)
     new_user.hash_password(password=password)
@@ -37,4 +37,4 @@ def register_user(email: str, password: str) -> dict:
 
     data = {"id": new_user.id, "email": new_user.email}
 
-    return data
+    return data, None

@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for
 
 from app.auth import login_user, register_user
 from config import db
+from utils import DATABASE_URL, SECRET_KEY
 
-app = Flask("__name__")
+app = Flask(__name__)
 
 
-app.secret_key = "random_secret_key"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///local.db"
+app.secret_key = SECRET_KEY
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app=app)
@@ -15,9 +16,9 @@ with app.app_context():
     db.create_all()
 
 
-@app.route("/health")
+@app.route("/health", methods=["GET"])
 def root():
-    return render_template("home.html")
+    return {"status": "ok"}, 200
 
 
 @app.route("/", methods=["GET"])
@@ -27,47 +28,40 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    try:
-        if request.method == "GET":
-            return render_template(url_for("login"))
+    if request.method == "GET":
+        return render_template("login.html")
 
-        email: str = request.form["email"]
-        password: str = request.form["password"]
+    email: str = request.form.get("email")
+    password: str = request.form.get("password")
 
-        result = login_user(email, password)
+    result, error = login_user(email, password)
 
-        if result:
-            session["user_id"] = result["id"]
-            session["email"] = result["email"]
+    if error:
+        return render_template("login.html", error=error)
 
-        return render_template(url_for("dashboard"))
-    except ValueError as e:
-        return render_template(url_for("login"), error=e)
-    except Exception:
-        return
+    session["user_id"] = result["id"]
+    session["email"] = result["email"]
+
+    return redirect(url_for("dashboard"))
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    try:
-        if request.method == "GET":
-            return render_template(url_for("register"))
+    if request.method == "GET":
+        return render_template("register.html")
 
-        email: str = request.form["email"]
-        password: str = request.form["password"]
+    email: str = request.form.get("email")
+    password: str = request.form.get("password")
 
-        result = register_user(email, password)
+    result, error = register_user(email, password)
 
-        if result:
-            session["user_id"] = result["id"]
-            session["email"] = result["email"]
+    if error:
+        return render_template("register.html", error=error)
 
-        return render_template(url_for("dashboard"))
+    session["user_id"] = result["id"]
+    session["email"] = result["email"]
 
-    except ValueError as e:
-        return render_template(url_for("register"), error=e)
-    except Exception:
-        return
+    return redirect("dashboard")
 
 
 @app.route("/logout", methods=["POST"])
@@ -75,12 +69,12 @@ def logout():
     user_id = session.get("user_id")
     email = session.get("email")
 
-    if not user_id or email:
-        return render_template(url_for("login"), error="Error Logging Out!")
+    if not user_id or not email:
+        return render_template("login.html", error="Error Logging Out!")
     else:
         session.clear()
 
-    return render_template(url_for("login"))
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":

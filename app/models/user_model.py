@@ -77,11 +77,16 @@ class Record(db.Model):  # ty:ignore[unsupported-base]
         index=True,
     )
 
-    dns_record_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),  # ty:ignore[no-matching-overload]
+    dns_record_id: Mapped[str] = mapped_column(
+        String,
         unique=True,
         nullable=False,
         index=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        default=datetime.now,
+        nullable=False,
     )
 
     user_id: Mapped[uuid.UUID] = mapped_column(

@@ -1,6 +1,92 @@
 {% extends "base.html" %} {% block content %}
 
-<h1>Home Page</h1>
-<a href="/login">login page</a>
+<section class="w-full bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+  <div class="max-w-6xl mx-auto px-6 py-24 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-6">
+      Manage Subdomains with Confidence
+    </h1>
+
+    <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+      SubDomainLender makes it easy to create, manage, and control DNS records
+      for your subdomains — all from a simple dashboard.
+    </p>
+
+    <div class="mt-10 flex justify-center gap-4">
+      <a
+        href="/dashboard"
+        class="bg-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+      >
+        Go to Dashboard
+      </a>
+
+      <a
+        href="/login"
+        class="border border-gray-400 px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition"
+      >
+        Sign In
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="w-full bg-gray-100">
+  <div class="max-w-6xl mx-auto px-6 py-20">
+    <h2 class="text-3xl font-semibold text-center mb-12 text-gray-800">
+      Why SubDomainLender?
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="text-xl font-semibold mb-3 text-gray-800">
+          Simple DNS Management
+        </h3>
+        <p class="text-gray-600">
+          Create A, AAAA, CNAME, and MX records without touching a terminal or
+          config files.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="text-xl font-semibold mb-3 text-gray-800">
+          Secure & Controlled
+        </h3>
+        <p class="text-gray-600">
+          Only records created by you are visible and manageable — full
+          ownership and traceability.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="text-xl font-semibold mb-3 text-gray-800">
+          Built for Speed
+        </h3>
+        <p class="text-gray-600">
+          Lightweight UI, fast operations, and no unnecessary complexity.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="w-full bg-blue-600 text-white">
+  <div class="max-w-6xl mx-auto px-6 py-20 text-center">
+    <h2 class="text-3xl font-semibold mb-4">
+      Ready to Manage Your Subdomains?
+    </h2>
+
+    <p class="text-blue-100 mb-8">
+      Get started in seconds — no setup required.
+    </p>
+
+    <a
+      href="/dashboard"
+      class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+    >
+      Open Dashboard
+    </a>
+  </div>
+</section>
 
 {% endblock content %}

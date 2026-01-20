@@ -1,8 +1,70 @@
 {% extends "base.html" %} {% block content %}
-<form action="/register" method="post">
-  <input type="email" name="email" />
-  <input type="password" name="password" />
+<div class="flex justify-center items-center m-[9rem]">
+  <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">Register</h1>
+      <p class="text-sm text-gray-500 mt-1">Create your account</p>
+    </div>
 
-  <button type="submit">submit</button>
-</form>
+    {% if error %}
+    <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <p class="text-sm text-red-700 font-medium">{{ error }}</p>
+    </div>
+    {% endif %}
+
+    <!-- register Form -->
+    <form method="POST" id="auth-form" action="/register" class="space-y-4">
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          placeholder="you@example.com"
+        />
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">
+          Password
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg transition"
+      >
+        Sign Up
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <p class="text-center text-sm text-gray-600 mt-6">
+      Already have an account?
+      <a
+        href="{{ url_for('login') }}"
+        class="text-indigo-600 font-medium hover:underline"
+      >
+        Sign In
+      </a>
+    </p>
+  </div>
+</div>
+
 {% endblock content %}

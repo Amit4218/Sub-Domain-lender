@@ -1,8 +1,11 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from app.auth import login_user, register_user
+from app.core import create_record, delete_record
+from app.middleware import isLoggedIn
 from config import db
 from utils import DATABASE_URL, SECRET_KEY
+from utils.get_user_records import get_user_records
 
 app = Flask(__name__)
 
@@ -24,6 +27,16 @@ def root():
 @app.route("/", methods=["GET"])
 def home():
     return render_template("home.html")
+
+
+@app.route("/about", methods=["GET"])
+def about():
+    return render_template("about.html")
+
+
+@app.errorhandler(Exception)
+def error(e):
+    return render_template("error.html", error=e)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -75,6 +88,58 @@ def logout():
         session.clear()
 
     return redirect(url_for("login"))
+
+
+@app.route("/dashboard", methods=["GET"])
+@isLoggedIn
+def dashboard():
+    user_id = session.get("user_id")
+    data = get_user_records(user_id=user_id)
+    return render_template("dashboard.html", records=data)
+
+
+@app.route("/add-record", methods=["POST"])
+@isLoggedIn
+def create_dns_record():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return render_template("login.html", error="User must be logged in first..")
+
+    type = request.form.get("type")
+    name = request.form.get("name")
+    content = request.form.get("content")
+    ttl = request.form.get("ttl")
+
+    if not type or not name or not content:
+        return render_template(
+            "dashboard.html", error="Name, Content and Type is required!"
+        )
+
+    error = create_record(id=user_id, name=name, type=type, content=content, ttl=ttl)
+
+    if error:
+        records = get_user_records(user_id=user_id)
+        return render_template("dashboard.html", error=error, records=records)
+
+    return redirect(url_for("dashboard"))
+
+
+@app.route("/delete-record/<record_id>", methods=["POST"])
+@isLoggedIn
+def delete_dns_record(record_id):
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return render_template("login.html", error="User must be logged in first..")
+
+    error = delete_record(user_id=user_id, record_id=record_id)
+
+    if error:
+        records = get_user_records(user_id=user_id)
+        return render_template("dashboard.html", error=error, records=records)
+
+    return redirect(url_for("dashboard"))
 
 
 if __name__ == "__main__":

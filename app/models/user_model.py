@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql.sqltypes import UUID
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -32,6 +32,8 @@ class User(db.Model):  # ty:ignore[unsupported-base]
         String(500),
         nullable=False,
     )
+
+    is_email_verified: Mapped[bool] = mapped_column(Boolean, default=False)
 
     created_at: Mapped[datetime] = mapped_column(
         default=datetime.now,

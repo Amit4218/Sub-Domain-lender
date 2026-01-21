@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from app.auth import login_user, register_user
+from app.auth import login_user, register_user, verify_user_token
 from app.core import create_record, delete_record
 from app.middleware import isLoggedIn
 from config import db
@@ -71,10 +71,7 @@ def register():
     if error:
         return render_template("register.html", error=error)
 
-    session["user_id"] = result["id"]
-    session["email"] = result["email"]
-
-    return redirect("dashboard")
+    return render_template("verify_email.html", email=result["email"])
 
 
 @app.route("/logout", methods=["POST"])
@@ -138,6 +135,29 @@ def delete_dns_record(record_id):
     if error:
         records = get_user_records(user_id=user_id)
         return render_template("dashboard.html", error=error, records=records)
+
+    return redirect(url_for("dashboard"))
+
+
+@app.route("/verify")
+def verify_user():
+    token = request.args.get("token")
+    email = request.args.get("email")
+
+    if not token:
+        return render_template(
+            "register.html", error="Token is required, please register again."
+        )
+
+    result, error = verify_user_token(token=token, email=email)
+
+    if error:
+        return render_template(
+            "register.html", error=f"{error}, please register again."
+        )
+
+    session["user_id"] = result["id"]
+    session["email"] = result["email"]
 
     return redirect(url_for("dashboard"))
 

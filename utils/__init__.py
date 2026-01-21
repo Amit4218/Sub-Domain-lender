@@ -1,8 +1,17 @@
 from .env_provider import (
+    BASE_URL,
     CLOUDFLARE_API_TOKEN,
     CLOUDFLARE_BASE_URL,
     DATABASE_URL,
+    RESEND_API_KEY,
     SECRET_KEY,
 )
 
-__all__ = ["DATABASE_URL", "CLOUDFLARE_API_TOKEN", "CLOUDFLARE_BASE_URL", "SECRET_KEY"]
+__all__ = [
+    "DATABASE_URL",
+    "CLOUDFLARE_API_TOKEN",
+    "CLOUDFLARE_BASE_URL",
+    "SECRET_KEY",
+    "RESEND_API_KEY",
+    "BASE_URL",
+]

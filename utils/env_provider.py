@@ -12,3 +12,7 @@ CLOUDFLARE_BASE_URL = os.getenv("CLOUDFLARE_BASE_URL")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+
+BASE_URL = os.getenv("BASE_URL")

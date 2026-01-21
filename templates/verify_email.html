@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="m-[9rem]">
+  <div class="flex items-center justify-center">
+    <div class="w-full max-w-lg bg-white rounded-xl shadow-lg p-8">
+      <div class="text-center">
+        <h1 class="font-bold text-2xl">You Are One Step Away !</h1>
+        <p class="mt-8 font-medium text-xl">
+          An verification email has been sent to <br />
+          <strong class="text-md">{{email}}</strong>
+        </p>
+      </div>
+      <div class="text-center mt-4 text-xs font-bold text-gray-700">
+        <span>Click on the Verify Email button to verify</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

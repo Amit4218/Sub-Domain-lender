@@ -34,11 +34,6 @@ def about():
     return render_template("about.html")
 
 
-@app.errorhandler(Exception)
-def error(e):
-    return render_template("error.html", error=e)
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -163,4 +158,4 @@ def verify_user():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

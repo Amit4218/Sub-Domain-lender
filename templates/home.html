@@ -18,13 +18,14 @@
       >
         Go to Dashboard
       </a>
-
+      {% if not session.get("user_id")%}
       <a
         href="/login"
         class="border border-gray-400 px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition"
       >
-        Sign In
+        Sign In {{session["user_id"]}}
       </a>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -79,13 +80,21 @@
     <p class="text-blue-100 mb-8">
       Get started in seconds — no setup required.
     </p>
-
+    {% if session.get("user_id") %}
     <a
       href="/dashboard"
       class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
     >
       Open Dashboard
     </a>
+    {% else %}
+    <a
+      href="/register"
+      class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+    >
+      Sign Up
+    </a>
+    {% endif %}
   </div>
 </section>
 

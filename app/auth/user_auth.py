@@ -62,7 +62,7 @@ def register_user(email: str, password: str):
 def verify_user_token(token, email):
     is_token_valid = uuid.uuid3(uuid.NAMESPACE_DNS, email)
 
-    if not is_token_valid:
+    if str(token) != str(is_token_valid):
         return None, "Invalid token! please register again."
 
     user = db.session.execute(

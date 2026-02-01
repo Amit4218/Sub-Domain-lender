@@ -1,6 +1,12 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from app.auth import login_user, register_user, verify_user_token
+from app.auth import (
+    login_user,
+    register_user,
+    verify_user_and_send_email,
+    verify_user_and_update_password,
+    verify_user_token,
+)
 from app.core import create_record, delete_record
 from app.middleware import isLoggedIn
 from config import db
@@ -147,14 +153,51 @@ def verify_user():
     result, error = verify_user_token(token=token, email=email)
 
     if error:
-        return render_template(
-            "register.html", error=f"{error}, please register again."
-        )
+        return render_template("register.html", error=error)
 
     session["user_id"] = result["id"]
     session["email"] = result["email"]
 
     return redirect(url_for("dashboard"))
+
+
+@app.route("/forget_password", methods=["GET", "POST"])
+def forget_password():
+    if request.method == "GET":
+        return render_template("forget_password.html")
+
+    email = request.form.get("email")
+
+    result, error = verify_user_and_send_email(email)
+
+    if error:
+        return render_template("forget_password.html", error=error)
+
+    return render_template("forget_password_email.html", email=email)
+
+
+@app.route("/reset_password", methods=["GET", "POST"])
+def reset_password():
+    token = request.args.get("token")
+    user_id = request.args.get("id")
+
+    print(token, user_id)
+
+    if request.method == "GET":
+        return render_template(
+            "reset_password.html", data={"token": token, "id": user_id}
+        )
+
+    new_password = request.form.get("new_password")
+
+    _, error = verify_user_and_update_password(
+        token=token, user_id=user_id, new_password=new_password
+    )
+
+    if error:
+        return render_template("forget_password.html", error=error)
+
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":

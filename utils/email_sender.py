@@ -36,7 +36,7 @@ def send_email(user_email: str, user_name: str, token: str):
     """
 
     params = {
-        "from": "SubDomainLender <noreply@amit4218.fun>",
+        "from": "SubDomainLender <subdomainlender@amit4218.fun>",
         "to": user_email,
         "subject": "Email Verification! Please verify your email",
         "html": html_structure,
@@ -76,7 +76,7 @@ def send_reset_password_email(user_email: str, user_name: str, token: str):
     """
 
     params = {
-        "from": "SubDomainLender <noreply@amit4218.fun>",
+        "from": "SubDomainLender <subdomainlender@amit4218.fun>",
         "to": user_email,
         "subject": "Password Reset Link",
         "html": html_structure,
